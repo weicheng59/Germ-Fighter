@@ -1,0 +1,70 @@
+package model;
+
+import java.io.Serializable;
+
+public abstract class Item implements Serializable {
+	private Cell cell;
+	private Item item;
+	private boolean restoreHealth;
+	private boolean dealDamage;
+	private boolean increaseAttack;
+	private int boost;
+	private int health;
+	private int damage;
+	
+	public Item(){
+		increaseAttack = false;
+		restoreHealth = false;
+		dealDamage = false;
+	}
+	
+	// set item values	
+	public void setItemValues(Item item){
+		
+		// boost attack by double
+		if(item.getItem() == "Boost"){
+			increaseAttack = true;
+			restoreHealth = false;
+			dealDamage = false;
+			
+			boost = getBoosting();
+		}
+		
+		// heal a unit by half its maximum health
+		if(item.getItem() == "Heal"){
+			increaseAttack = true;
+			restoreHealth = false;
+			dealDamage = false;
+			
+			health = getHealing();
+		}
+		
+		// use a bomb with power equal to a unit's attack
+		if(item.getItem() == "Bomb"){
+			increaseAttack = true;
+			restoreHealth = false;
+			dealDamage = false;
+			
+			damage = getDamageDealing();
+		}		
+	}
+	
+	// get item values	
+	public int getBoosting(){
+		if(cell.getAttackPoints()/2 == 0)
+			return cell.getAttackPoints();		
+		return cell.getAttackPoints()*2;
+	}
+	
+	public int getHealing(){
+		if(cell.getHealth()/2 == 0)
+			return 1;
+		return cell.getHealth()/2;
+	}
+	
+	public int getDamageDealing(){
+		if(cell.getAttackPoints()/2 == 0)
+			return 1;
+		return cell.getAttackPoints()/2;
+	}	
+}
