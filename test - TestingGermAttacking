@@ -187,7 +187,7 @@ public class TestingGermAttacking {
 		System.out.println("<= Testing A Basic Germ Unit Attacking =>" + "\n");
 	}
 	
-// 	TODO Germ Ranged unit attacking unit test [[IN PROGRESS]]
+// 	Germ Ranged unit attacking unit test [[COMPLETED]]
 	@Test
 	public void testingGermRangedAttacking(){
 		Cell ranged = new GermRanged();
