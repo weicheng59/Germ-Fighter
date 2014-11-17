@@ -3,6 +3,8 @@ package model;
 public class Bomb extends Item{
 	private int damage;
 	
+	
+	// This is a test git comment.
 	public Bomb(){
 		setItemName("Bomb");
 	}
