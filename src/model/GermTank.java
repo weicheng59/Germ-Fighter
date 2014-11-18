@@ -10,7 +10,7 @@ public class GermTank extends Cell{
 	
 	// newborn WBC initial stats
 	public GermTank(){
-		setCell("Tank");
+		setCellName("Tank");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);
@@ -44,12 +44,6 @@ public class GermTank extends Cell{
 		} else
 			System.out.println("This unit does not have enough action points to do so.");
 			return false;
-	}
-
-	@Override
-	public boolean move(int locationX, int locationY) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

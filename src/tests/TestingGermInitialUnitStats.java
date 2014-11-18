@@ -18,7 +18,7 @@ public class TestingGermInitialUnitStats {
 	public void testingGermBasicInitialUnit(){
 		Cell germ = new GermBasic();
 		
-		assertEquals(germ.getCell(), "Basic");
+		assertEquals(germ.getCellName(), "Basic Germ");
 		assertEquals(germ.getAttackPoints(), 4);
 		assertEquals(germ.getHealth(), 10);
 		assertEquals(germ.getAttackRange(), 1);
@@ -32,7 +32,7 @@ public class TestingGermInitialUnitStats {
 	public void testingGermRangedInitialUnit(){
 		Cell germ = new GermRanged();
 		
-		assertEquals(germ.getCell(), "Ranged");
+		assertEquals(germ.getCellName(), "Ranged");
 		assertEquals(germ.getAttackPoints(), 4);
 		assertEquals(germ.getHealth(), 8);
 		assertEquals(germ.getAttackRange(), 3);
@@ -46,7 +46,7 @@ public class TestingGermInitialUnitStats {
 	public void testingGermTankInitialUnit(){
 		Cell germ = new GermTank();
 		
-		assertEquals(germ.getCell(), "Tank");
+		assertEquals(germ.getCellName(), "Tank");
 		assertEquals(germ.getAttackPoints(), 3);
 		assertEquals(germ.getHealth(), 15);
 		assertEquals(germ.getAttackRange(), 1);
@@ -60,7 +60,7 @@ public class TestingGermInitialUnitStats {
 	public void testingGermSplashAttackerInitialUnit(){
 		Cell germ = new GermSplashAttacker();
 		
-		assertEquals(germ.getCell(), "Splash Attacker");
+		assertEquals(germ.getCellName(), "Splash Attacker");
 		assertEquals(germ.getAttackPoints(), 3);
 		assertEquals(germ.getHealth(), 8);
 		assertEquals(germ.getAttackRange(), 1);
@@ -74,7 +74,7 @@ public class TestingGermInitialUnitStats {
 	public void testingGermMedicInitialUnit(){
 		Cell germ = new GermMedic();
 		
-		assertEquals(germ.getCell(), "Medic");
+		assertEquals(germ.getCellName(), "Medic");
 		assertEquals(germ.getAttackPoints(), 4);
 		assertEquals(germ.getHealth(), 10);
 		assertEquals(germ.getAttackRange(), 1);

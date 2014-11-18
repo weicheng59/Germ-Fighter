@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GermBasic extends Cell{
-	private List<Item> items;
-	private final int ATTACK_POINTS = 4, HEALTH_POINTS = 10, MAX_HEALTH_POINTS = 10, ATTACK_RANGE = 1, 
-					  MOVE_RANGE = 6, ACTION_POINTS = 6;
+	private Item item2;
+	private final int ATTACK_POINTS = 4, HEALTH_POINTS = 10, MAX_HEALTH_POINTS = 10,
+					  ATTACK_RANGE = 1, MOVE_RANGE = 6, ACTION_POINTS = 6;
 	
 	// newborn Germ initial stats
 	public GermBasic(){
-		setCell("Basic");
+		setCellName("Basic Germ");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);
 		setAttackRange(ATTACK_RANGE);
 		setMoveRange(MOVE_RANGE);
 		setActionPoints(ACTION_POINTS);
+		
 		setDoublingEffectValid(true);
 		setIcon("[G]");
-		items = new ArrayList<Item>();
 	}
 
 	@Override
@@ -45,6 +45,7 @@ public class GermBasic extends Cell{
 			System.out.println("This unit does not have enough action points to do so.");
 			return false;
 	}
+	 
 	
 	@Override
 	public void useItem(Item item) {
@@ -55,23 +56,18 @@ public class GermBasic extends Cell{
 			setHealth(HEALTH_POINTS + item.getHealth());
 		}
 		else{
-			setBombDamage();
+	//		set the bomb damage and also use that as an all around attack
 		}
 	
 	}
-	
-	/**
-	 * Since WBCBasic can pick up two items, use addItem instead of
-	 * setItem
-	 * @param item
-	 * @return
-	 */
-	public boolean addItem(Item item) {
-		if (items.size() < 2) {
-			items.add(item);
-			return true;
-		} else
-			return false;
+
+	public Item getItem2() {
+		return item2;
 	}
+
+	public void setItem2(Item item) {
+		this.item2 = item;
+	}
+	
 	
 }

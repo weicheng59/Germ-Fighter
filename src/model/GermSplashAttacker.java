@@ -10,7 +10,7 @@ public class GermSplashAttacker extends Cell{
 	
 	// newborn Germ initial stats
 	public GermSplashAttacker(){
-		setCell("Splash Attacker");
+		setCellName("Splash Attacker");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);

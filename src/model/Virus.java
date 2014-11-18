@@ -13,7 +13,7 @@ public class Virus extends Cell{
 					  MOVE_RANGE = 6, ACTION_POINTS = 6;
 	
 	public Virus(){
-		setCell("Virus");
+		setCellName("Virus");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);

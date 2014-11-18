@@ -10,7 +10,7 @@ public class GermRanged extends Cell{
 	
 	// newborn Germ initial stats
 	public GermRanged(){
-		setCell("Ranged");
+		setCellName("Ranged");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);

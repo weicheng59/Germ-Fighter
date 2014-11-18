@@ -10,7 +10,7 @@ public class GermMedic extends Cell{
 	
 	// newborn Germ initial stats
 	public GermMedic(){
-		setCell("Medic");
+		setCellName("Medic");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);

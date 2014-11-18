@@ -10,25 +10,28 @@ import java.io.Serializable;
 public abstract class Cell implements Serializable{
 	
 	// Variables
-	private String cell; // type of cell
+	private String cellName; // type of cell
 	private int attackPoints;// cell's attack strength
 	private int maxHealth;// cell's health; how much damage it can take
 	private int health;// cell's actual health; any damage calculated
 	private int attackRange;// areas a cell can attack
 	private int moveRange;// areas a cell can move
 	private int actionPoints;// cell's energy to do stuff
+	private int maxActionPoints;
 	private int locationX;// cell's x-coordinate location
 	private int locationY;// cell's y-coordinate location
 	private boolean doublingTruth;// allows picking up Attack Booster item or pass by it
 	private Item item;// item of a cell's inventory
 	private String icon;// shows what the cell will look like on the textview
+	private String[][] gameMap;
+	private boolean turn;
 	
 	public Cell(){
 		
 	}
 	
 	public Cell(String cell, int attackPoints, int health, int attackRange, int moveRange, int actionPoints, Item item){
-		this.cell = cell;
+		this.cellName = cell;
 		this.attackPoints = attackPoints;
 		this.health = health;
 		this.attackRange = attackRange;
@@ -36,15 +39,17 @@ public abstract class Cell implements Serializable{
 		this.actionPoints = actionPoints;
 		this.item = item;
 		maxHealth = health;
+		maxActionPoints = actionPoints;
 		doublingTruth = true;
+		turn = false;
 	}
 	
-	public String getCell() {
-		return cell;
+	public String getCellName() {
+		return cellName;
 	}
 
-	public void setCell(String cell) {
-		this.cell = cell;
+	public void setCellName(String cell) {
+		this.cellName = cell;
 	}
 
 	public int getAttackPoints() {
@@ -69,6 +74,14 @@ public abstract class Cell implements Serializable{
 
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
+	}
+	
+	public int getMaxActionPoints(){
+		return maxActionPoints;
+	}
+	
+	public void setMaxActionPoints(int maxActionPoints){
+		this.maxActionPoints = maxActionPoints;
 	}
 
 	public int getAttackRange() {
@@ -141,6 +154,17 @@ public abstract class Cell implements Serializable{
 	public int getDistance(int locationX, int locationY) {
 		return Math.abs(getLocationX() - locationX) + Math.abs(getLocationY() - locationY);
 	}
+	
+	// 
+	public void endTurn(){
+		setActionPoints(0);
+	}
+	
+	public void beginTurn(){
+		setActionPoints(maxActionPoints);
+	}
+	
+	
 
 	/**
 	 * Subclasses must implement the following methods.
@@ -155,30 +179,24 @@ public abstract class Cell implements Serializable{
 		this.doublingTruth = doublingTruth;
 	}*/
 	
-	/**
-	 * move to another location inputed by user	
-	 * return if the move is sucessfully
-	 * 
+	/*
+	 public int getCellLevel(){
+	 	return level;
+	 }
+	 
+	 public void setCellLevel(int level){
+	 	this.level = level;
+	 }
+	 
+	 public void cellLeveledUp(Cell cell){
+	 	cell.setCellLevel(cell.getCellLevel() + 1);
+	 }
 	 */
-	public boolean move(int locationX, int locationY){
-		
-		/*
-		 * -pick up an item is true unless full inventory
-		 * -pick up an item is false if the item on the space is an
-		 * 		AttackBooster, if one was used/is in the inventory
-		 * 		(basic unit case) 
-		 */
-		
-		
-		
-		return false;
-	}
+	
 	
 	// "using" methods
 	public abstract void useItem(Item item);
 
-
-	
 	
 	/**
 	 * return true if unit
