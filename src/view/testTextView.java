@@ -8,13 +8,13 @@ import java.util.Observer;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import model.SimpleGameSetup;
+import model.GermFighter;
 
 public class testTextView extends JPanel implements Observer{
 	
 	private JTextArea text;
 	
-	public testTextView(SimpleGameSetup theGame){
+	public testTextView(GermFighter theGame){
 		text = new JTextArea();
 		text.setBackground(Color.GRAY);
 		setLayout(null);
@@ -39,7 +39,7 @@ public class testTextView extends JPanel implements Observer{
 
 	@Override
 	public void update(Observable observedObject, Object unused) {
-		SimpleGameSetup theGame = (SimpleGameSetup) observedObject;
+		GermFighter theGame = (GermFighter) observedObject;
 		
 		String textView = "";
 		

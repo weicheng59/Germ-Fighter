@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
-import model.SimpleGameSetup;
+import model.GermFighter;
 
 public class testGame1Frame extends JFrame{
 	
@@ -26,7 +26,7 @@ public class testGame1Frame extends JFrame{
 	
 	private JFrame frame;
 	private JTabbedPane severalPanels;
-	private SimpleGameSetup theGame;
+	private GermFighter theGame;
 	private testTextView testTextView;
 	
 //	private JComboBox options;//<<<< drop down list that has options
@@ -40,7 +40,7 @@ public class testGame1Frame extends JFrame{
 	private JPanel prompt;*/
 	
 	public testGame1Frame(){
-		theGame = new SimpleGameSetup(5);
+		theGame = new GermFighter(5);
 		layoutGameGUI();
 		setUpModelAndObservers();
 	}

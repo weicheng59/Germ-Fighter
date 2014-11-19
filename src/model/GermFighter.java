@@ -2,7 +2,7 @@ package model;
 
 import java.util.Observable;
 
-public class SimpleGameSetup  extends Observable{
+public class GermFighter  extends Observable{
 	
 	private Room[][] gameMap;
 	private Cell germ, wbc;
@@ -12,12 +12,11 @@ public class SimpleGameSetup  extends Observable{
 	private int wbcY = 0;
 	private int itemX = 0;
 	private int itemY = 0;
-	private boolean gameOver = false;
 	private String prompt = "";
 	
-	public SimpleGameSetup(int mapSize){
+	public GermFighter(int mapSize){
 		germ = new GermBasic();
-	//	wbc = new WBCBasic();
+		//wbc = new GermBasic();
 		gameMap = new Room[mapSize][mapSize];
 		
 		for(int i = 0; i < mapSize; i++){
@@ -33,8 +32,24 @@ public class SimpleGameSetup  extends Observable{
 		prompt = "Germ-Fighter! A Sick Game to Play!";
 	}
 	
+	public Cell getGerm() {
+		return germ;
+	}
+	
+	public Cell getWbc() {
+		return wbc;
+	}
+	
 	public Room getRoom(int x, int y){
 		return gameMap[x][y];
+	}
+	
+	public Room[][] getMap(){
+		return gameMap;
+	}
+	
+	public String getPromot() {
+		return prompt;
 	}
 
 	private void SpawnGerm(int mapSize) {
@@ -46,9 +61,12 @@ public class SimpleGameSetup  extends Observable{
 	}
 	
 	private void SpawnItem(int mapSize){
-		itemX = 2;
-		itemY = 2;
+		itemX = mapSize/2;
+		itemY = mapSize/2;
 		
+		Item healthPack = new HealthPack();
+		
+		gameMap[itemX][itemY].setItem(healthPack);
 		gameMap[itemX][itemY].setItem(true);
 		gameMap[itemX][itemY].setEmpty(false);
 	}
@@ -71,19 +89,6 @@ public class SimpleGameSetup  extends Observable{
 		}
 	}
 	
-	public void whoseTurn(){
-		// whether action points are zero or the player ends turn
-		
-		// 1.) when the end turn button is pressed
-		
-		// 2.) when a cell faction runs out of action points
-		if(wbc.getActionPoints() == 0){
-			germ.setActionPoints(germ.getMaxActionPoints());
-		}
-		if(germ.getActionPoints() == 0){
-			wbc.setActionPoints(wbc.getMaxActionPoints());
-		}
-	}
 	
 	public boolean move(Cell aCell, MoveDirection direction) {
 		
@@ -167,5 +172,20 @@ public class SimpleGameSetup  extends Observable{
 			
 		}
 		return true;
+	}
+	
+	/**
+	 * This method prints the current gameMap in console
+	 */
+	public void printMap(int mapSize) {
+		for (int i = 0; i < mapSize; i++) {
+			for (int j = 0; j < mapSize; j++)
+				System.out.print(gameMap[i][j] + " ");
+			System.out.println("\n ");
+		}
+	}
+	
+	public void printPrompt() {
+		System.out.println(prompt);
 	}
 }
