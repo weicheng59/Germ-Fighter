@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 import model.Cell;
+import model.Cell.Team;
 import model.GermBasic;
 import model.GermMedic;
 import model.GermRanged;
@@ -11,12 +12,13 @@ import model.GermTank;
 import org.junit.Test;
 
 public class TestingGermAttacking {
-	private Cell target = new GermBasic();
+	private Cell target;
+	private Team team = Team.GERM;
 	
 //	Germ Basic unit attacking unit test [[COMPLETED]]
 	@Test
 	public void testingGermBasicAttacking(){
-		Cell basic = new GermBasic();
+		Cell basic = new GermBasic(team);
 		
 		System.out.println("***" + "\n" + "<= Testing A Basic Germ Unit Attacking =>");
 		
@@ -190,7 +192,7 @@ public class TestingGermAttacking {
 // 	Germ Ranged unit attacking unit test [[COMPLETED]]
 	@Test
 	public void testingGermRangedAttacking(){
-		Cell ranged = new GermRanged();
+		Cell ranged = new GermRanged(team);
 		System.out.println("***" + "\n" + "<= Testing A Ranged Germ Unit Attacking =>");
 		
 		// cannot attack
@@ -753,7 +755,7 @@ public class TestingGermAttacking {
 	//TODO Germ Tank unit attacking test [[IN PROGRESS]]
 	@Test
 	public void testingGermTankAttacking(){
-		Cell tank = new GermTank();
+		Cell tank = new GermTank(team);
 		
 		System.out.println("***" + "\n" + "<= Testing A Tank Germ Unit Attacking =>");
 		
@@ -763,7 +765,7 @@ public class TestingGermAttacking {
 // Germ Splash Attacker unit attacking test [[COMPLETED]]
 	@Test
 	public void testingGermSplashAttackerAttacking(){
-		Cell splashAttacker = new GermSplashAttacker();
+		Cell splashAttacker = new GermSplashAttacker(team);
 		
 		System.out.println("***" + "\n" + "<= Testing A Splash Attacker Germ Unit Attacking =>");
 		
@@ -977,7 +979,7 @@ public class TestingGermAttacking {
 //	Germ Medic unit attacking unit test [[COMPLETED]]
 	@Test
 	public void testingGermMedicAttacking(){
-		Cell medic = new GermMedic();
+		Cell medic = new GermMedic(team);
 		
 		
 		System.out.println("***" + "\n" + "<= Testing A Medic Germ Unit Attacking =>");

@@ -18,6 +18,7 @@ public class TextViewGame {
 	private static GermFighter game;
 	private static Player p1, p2;
 	private static Scanner scan = new Scanner(System.in);
+	private static boolean isP1turn; // store whoes turn
 	
 	public static void main(String[] args) {
 		// Setup Map and Welcome info
@@ -50,8 +51,9 @@ public class TextViewGame {
 		
 		// Spawn cells on maps
 		// For iteration 1 we use a preset spawning location
-		
-		
+		game.SpawnCell(p1.getCrew().get(0));
+		game.SpawnCell(p2.getCrew().get(0));
+		game.SpawnItem(new HealthPack());
 		
 		// Decide who goes first
 		// the player go first will have its goFirst boolean set to true
@@ -59,9 +61,171 @@ public class TextViewGame {
 		
 		// Set newTurn so the goFirst player can move his/her units
 		if(p1.goFirst())
-			p1.newTurn();
+			isP1turn = true;
+		 else 
+			isP1turn = false;
+		
+		// Show the map
+		game.printMap(MAP_SIZE);
+		
+		while (!p1.isLost() && !p2.isLost()) {
+			if (isP1turn) {
+				p1.newTurn();
+				while(p1.turnEnd() == false) {
+					game.setPrompt("Player 1 please choose crew member to control. (input number)"
+							+ "\nOr input 0 to end turn.");
+					game.printPrompt();
+					p1.printCrew();
+					
+					int crewIndex = scan.nextInt();
+					while(crewIndex > 1 || crewIndex < 0) {
+						game.printInvalidInput();
+						crewIndex = scan.nextInt();
+					}
+					switch (crewIndex) {
+					case 0:
+						p1.endTurn();
+						isP1turn = false;
+						break;
+					case 1:
+						controlCell(p1, 0);
+						break;
+					// Dont worry about other cells for iteration1
+						
+					}
+				}
+			} else {
+				p2.newTurn();
+				while(p2.turnEnd() == false) {
+					game.setPrompt("Player 2 please choose crew member to control. (input number)"
+							+ "\nOr input 0 to end turn.");
+					game.printPrompt();
+					p2.printCrew();
+					
+					int crewIndex = scan.nextInt();
+					while(crewIndex > 1 || crewIndex < 0) {
+						game.printInvalidInput();
+						crewIndex = scan.nextInt();
+					}
+					switch (crewIndex) {
+					case 0:
+						p2.endTurn();
+						isP1turn = true;
+						break;
+					case 1:
+						controlCell(p2, 0);
+						break;
+						
+					// Dont worry about other cells for iteration1
+						
+					}
+				} 
+			}
+		}
+		
+		// Show game over information and who wins
+		if (p1.isLost())
+			game.setPrompt("Player 2 wins!\nGame Over!");
 		else
-			p2.newTurn();
+			game.setPrompt("Player 1 wins!\nGame Over!");
+		game.printPrompt();
+	}
+	
+	private static void controlCell(Player player, int i) {
+		game.setPrompt("Please choose an action to perform. (input number)"
+				+ "\nOr input 0 to return to the crew member choosing menu."
+				+ "\n1. Move\n2. Attack\n3. Use item (not avaible in this beta)");
+		game.printPrompt();
+		int actionIndex = scan.nextInt();
+		while (actionIndex != 0) {
+			switch (actionIndex) {
+			case 1:
+				move(player, i);
+				break;
+			case 2:
+				attack(player, i);
+				actionIndex = 0;
+				break;
+			}
+			game.setPrompt("Please choose an action to perform. (input number)"
+					+ "\nOr input 0 to return to the crew member choosing menu."
+					+ "\n1. Move\n2. Attack\n3. Use item (not avaible in this beta)");
+			game.printPrompt();
+			actionIndex = scan.nextInt();
+		}
+	}
+	
+	private static void attack(Player player, int i) {
+		game.setPrompt("Choose a direction to attack. (input wasd)" 
+					+"\nOr input f to finish attack and return to the previous menu.");
+		game.printPrompt();
+		game.printMap(MAP_SIZE);
+		Cell aCell = player.getCrew().get(i);
+		int x = aCell.getLocationX(), y = aCell.getLocationY(), prompt = 0;
+		String attackDirection = scan.next();
+			if (attackDirection.equals("w")) {
+				prompt = aCell.attack(game.getRoom(y-1, x).getCell());
+				if (prompt == 3) {
+					if (player.getPlayerNum() == 1)
+						p2.removeCell(game.getRoom(y-1, x).getCell());
+					else
+						p1.removeCell(game.getRoom(y-1, x).getCell());
+				}
+			}
+			else if (attackDirection.equals("a")) {
+				prompt = aCell.attack(game.getRoom(y, x-1).getCell());
+				if (prompt == 3) {
+					if (player.getPlayerNum() == 1)
+						p2.removeCell(game.getRoom(y, x-1).getCell());
+					else
+						p1.removeCell(game.getRoom(y, x-1).getCell());
+				}
+			}
+			else if (attackDirection.equals("s")) {
+				prompt = aCell.attack(game.getRoom(y+1, x).getCell());
+				if (prompt == 3) {
+					if (player.getPlayerNum() == 1)
+						p2.removeCell(game.getRoom(y+1, x).getCell());
+					else
+						p1.removeCell(game.getRoom(y+1, x).getCell());
+				}
+			}
+			else if (attackDirection.equals("d")) {
+				prompt = aCell.attack(game.getRoom(y, x+1).getCell());
+				if (prompt == 3) {
+					if (player.getPlayerNum() == 1)
+						p2.removeCell(game.getRoom(y+1, x).getCell());
+					else
+						p1.removeCell(game.getRoom(y+1, x).getCell());
+				}
+			}
+			else if (attackDirection.equals("f")) {
+				game.setPrompt("Finish attacking.");
+				game.printPrompt();
+			}
+	}
+	
+	private static void move(Player player, int i) {
+		Cell aCell = player.getCrew().get(i);
+		game.setPrompt("Now you have acess to move " + aCell.getCellName() 
+				+ " til the cell run out of action points. (input wasd)" 
+				+ "\nOr input f to finish move and return to the previous menu.");
+		game.printPrompt();
+		String moveDirection = scan.nextLine();
+		while(!moveDirection.equals("f")) {
+			if (moveDirection.equals("w"))
+				game.move(aCell, MoveDirection.Up);
+			else if (moveDirection.equals("a"))
+				game.move(aCell, MoveDirection.Left);
+			else if (moveDirection.equals("s"))
+				game.move(aCell, MoveDirection.Down);
+			else if (moveDirection.equals("d"))
+				game.move(aCell, MoveDirection.Right);
+			game.printMap(MAP_SIZE);
+			moveDirection = scan.nextLine();
+		}
+		game.setPrompt("Finish moving.");
+		game.printPrompt();
 	}
 	
 	private static void roll(Player p1, Player p2) {
@@ -90,11 +254,11 @@ public class TextViewGame {
 		}
 		
 		if (roll1 > roll2) {
-			game.setPrompt("Player 1 goes first!");
+			game.setPrompt("Player 1 goes first!\n");
 			p1.setGoFirst(true);
 		}
 		else if (roll1 < roll2) {
-			game.setPrompt("Player 2 goes first!");
+			game.setPrompt("Player 2 goes first!\n");
 			p2.setGoFirst(true);
 		}
 		game.printPrompt();

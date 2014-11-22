@@ -2,42 +2,24 @@ package model;
 
 import java.util.Observable;
 
+import model.Cell.Team;
+
 public class GermFighter  extends Observable{
 	
 	private Room[][] gameMap;
-	private Cell germ, wbc;
-	private int germX = 0;
-	private int germY = 0;
-	private int wbcX = 0;
-	private int wbcY = 0;
-	private int itemX = 0;
-	private int itemY = 0;
 	private String prompt = "";
 	
 	public GermFighter(int mapSize){
-		germ = new GermBasic();
-		//wbc = new GermBasic();
 		gameMap = new Room[mapSize][mapSize];
 		
+		// Intial the map with empty room
 		for(int i = 0; i < mapSize; i++){
 			for(int j = 0; j < mapSize; j++){
 				gameMap[i][j] = new Room();
 			}
 		}
-		
-		SpawnGerm(mapSize);
-		SpawnWBC(mapSize);
-		SpawnItem(mapSize);
-		setEmpty(mapSize);
+
 		prompt = "Germ-Fighter! A Sick Game to Play!";
-	}
-	
-	public Cell getGerm() {
-		return germ;
-	}
-	
-	public Cell getWbc() {
-		return wbc;
 	}
 	
 	public Room getRoom(int x, int y){
@@ -48,47 +30,33 @@ public class GermFighter  extends Observable{
 		return gameMap;
 	}
 	
+	public void setPrompt(String prompt) {
+		this.prompt = prompt;
+	}
+	
 	public String getPromot() {
 		return prompt;
 	}
 
-	private void SpawnGerm(int mapSize) {
-		germX = 0;
-		germY = 0;
-		
-		gameMap[germX][germY].setGerm(true);
-		gameMap[germX][germY].setEmpty(false);
-	}
-	
-	private void SpawnItem(int mapSize){
-		itemX = mapSize/2;
-		itemY = mapSize/2;
-		
-		Item healthPack = new HealthPack();
-		
-		gameMap[itemX][itemY].setItem(healthPack);
-		gameMap[itemX][itemY].setItem(true);
-		gameMap[itemX][itemY].setEmpty(false);
-	}
-	
-	private void SpawnWBC(int mapSize) {
-		wbcX = mapSize-1;
-		wbcY = mapSize-1;
-		
-		gameMap[wbcX][wbcY].setWbc(true);
-		gameMap[wbcX][wbcY].setEmpty(false);
-	}
-	
-	private void setEmpty(int mapSize) {
-		for (int i = 0; i < mapSize; i++) {
-			for (int j = 0; j < mapSize; j++){
-				if (!gameMap[i][j].isGerm() && !gameMap[i][j].isItem()
-						&& !gameMap[i][j].isMapObject() && !gameMap[i][j].isWbc())
-					gameMap[i][j].setEmpty(true);
-			}
+	// preset the Germ to the left corner of the gameMap
+	public void SpawnCell(Cell aCell) {
+		if(aCell.getTeam() == Team.GERM) {
+			aCell.setLocationX(0);
+			aCell.setLocationY(0);
+		} else {
+			aCell.setLocationX(getMap().length-1);
+			aCell.setLocationY(getMap().length-1);
 		}
+		
+		gameMap[aCell.getLocationY()][aCell.getLocationX()].setCell(aCell);
 	}
 	
+	public void SpawnItem(Item aItem){
+		aItem.setLocationX(getMap().length/2);
+		aItem.setLocationY(getMap().length/2);
+				
+		gameMap[aItem.getLocationY()][aItem.getLocationX()].setItem(aItem);
+	}
 	
 	public boolean move(Cell aCell, MoveDirection direction) {
 		
@@ -107,17 +75,14 @@ public class GermFighter  extends Observable{
 				return false;
 			
 			// pick up the item if there is one
-			if(gameMap[y-1][x].isItem()) {
-				aCell.setItem(gameMap[y-1][x].getItem());
-				gameMap[y-1][x].setItem(false);
-			}
+			if(gameMap[y-1][x].hasItem())
+				aCell.setItem(gameMap[y-1][x].removeItem());
 			
-			gameMap[y][x].setGerm(false);
-			gameMap[y-1][x].setGerm(true);
+			gameMap[y][x].setCell(null);
+			gameMap[y-1][x].setCell(aCell);
 			
 			// change the location information stored in cell			
 			aCell.setLocationY(y-1);
-			
 		} else if(direction == MoveDirection.Down) {
 			
 			// return false if the room is not enterable
@@ -125,13 +90,11 @@ public class GermFighter  extends Observable{
 				return false;
 			
 			// pick up the item if there is one
-			if(gameMap[y+1][x].isItem()) {
-				aCell.setItem(gameMap[y+1][x].getItem());
-				gameMap[y+1][x].setItem(false);
-			}
+			if(gameMap[y+1][x].hasItem())
+				aCell.setItem(gameMap[y+1][x].removeItem());
 			
-			gameMap[y][x].setGerm(false);
-			gameMap[y+1][x].setGerm(true);
+			gameMap[y][x].setCell(null);
+			gameMap[y+1][x].setCell(aCell);
 			
 			// change the location information stored in cell			
 			aCell.setLocationY(y+1);
@@ -142,13 +105,11 @@ public class GermFighter  extends Observable{
 				return false;
 			
 			// pick up the item if there is one
-			if(gameMap[y][x-1].isItem()) {
-				aCell.setItem(gameMap[y][x-1].getItem());
-				gameMap[y][x-1].setItem(false);
-			}
+			if(gameMap[y][x-1].hasItem())
+				aCell.setItem(gameMap[y][x-1].removeItem());
 			
-			gameMap[y][x].setGerm(false);
-			gameMap[y][x-1].setGerm(true);
+			gameMap[y][x].setCell(null);
+			gameMap[y][x-1].setCell(aCell);
 			
 			// change the location information stored in cell			
 			aCell.setLocationX(x-1);
@@ -158,21 +119,20 @@ public class GermFighter  extends Observable{
 				return false;
 			
 			// pick up the item if there is one
-			if(gameMap[y][x+1].isItem()) {
-				aCell.setItem(gameMap[y][x+1].getItem());
-				gameMap[y][x+1].setItem(false);
-
-			}
+			if(gameMap[y][x+1].hasItem())
+				aCell.setItem(gameMap[y][x+1].removeItem());
 			
-			gameMap[y][x].setGerm(false);
-			gameMap[y][x+1].setGerm(true);
+			gameMap[y][x].setCell(null);
+			gameMap[y][x+1].setCell(aCell);
 			
 			// change the location information stored in cell			
 			aCell.setLocationX(x+1);
-			
 		}
+		aCell.setActionPoints(aCell.getActionPoints()-1);
 		return true;
 	}
+	
+
 	
 	/**
 	 * This method prints the current gameMap in console
@@ -180,12 +140,16 @@ public class GermFighter  extends Observable{
 	public void printMap(int mapSize) {
 		for (int i = 0; i < mapSize; i++) {
 			for (int j = 0; j < mapSize; j++)
-				System.out.print(gameMap[i][j] + " ");
+				System.out.print(gameMap[i][j].toString() + " ");
 			System.out.println("\n ");
 		}
 	}
 	
 	public void printPrompt() {
 		System.out.println(prompt);
+	}
+	
+	public void printInvalidInput() {
+		System.out.println("Invailed input! Please try again");
 	}
 }

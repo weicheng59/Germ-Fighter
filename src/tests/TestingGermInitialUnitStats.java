@@ -8,15 +8,17 @@ import model.GermRanged;
 import model.GermSplashAttacker;
 import model.GermTank;
 import model.Item;
+import model.Cell.Team;
 
 import org.junit.Test;
 
 public class TestingGermInitialUnitStats {
 	private Item testItem;
+	private Team team = Team.GERM;
 	
 	@Test
 	public void testingGermBasicInitialUnit(){
-		Cell germ = new GermBasic();
+		Cell germ = new GermBasic(team);
 		
 		assertEquals(germ.getCellName(), "Basic Germ");
 		assertEquals(germ.getAttackPoints(), 4);
@@ -30,7 +32,7 @@ public class TestingGermInitialUnitStats {
 	
 	@Test
 	public void testingGermRangedInitialUnit(){
-		Cell germ = new GermRanged();
+		Cell germ = new GermRanged(team);
 		
 		assertEquals(germ.getCellName(), "Ranged");
 		assertEquals(germ.getAttackPoints(), 4);
@@ -44,7 +46,7 @@ public class TestingGermInitialUnitStats {
 	
 	@Test
 	public void testingGermTankInitialUnit(){
-		Cell germ = new GermTank();
+		Cell germ = new GermTank(team);
 		
 		assertEquals(germ.getCellName(), "Tank");
 		assertEquals(germ.getAttackPoints(), 3);
@@ -58,7 +60,7 @@ public class TestingGermInitialUnitStats {
 	
 	@Test
 	public void testingGermSplashAttackerInitialUnit(){
-		Cell germ = new GermSplashAttacker();
+		Cell germ = new GermSplashAttacker(team);
 		
 		assertEquals(germ.getCellName(), "Splash Attacker");
 		assertEquals(germ.getAttackPoints(), 3);
@@ -72,7 +74,7 @@ public class TestingGermInitialUnitStats {
 	
 	@Test
 	public void testingGermMedicInitialUnit(){
-		Cell germ = new GermMedic();
+		Cell germ = new GermMedic(team);
 		
 		assertEquals(germ.getCellName(), "Medic");
 		assertEquals(germ.getAttackPoints(), 4);

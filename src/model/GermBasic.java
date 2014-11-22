@@ -9,41 +9,41 @@ public class GermBasic extends Cell{
 					  ATTACK_RANGE = 1, MOVE_RANGE = 6, ACTION_POINTS = 6;
 	
 	// newborn Germ initial stats
-	public GermBasic(){
+	public GermBasic(Team team){
+		super(team);
 		setCellName("Basic Germ");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);
 		setAttackRange(ATTACK_RANGE);
 		setMoveRange(MOVE_RANGE);
-		setActionPoints(ACTION_POINTS);
-		
+		setMaxActionPoints(ACTION_POINTS);
+		setActionPoints(0);
 		setDoublingEffectValid(true);
-		setIcon("[G]");
 	}
 
 	@Override
-	public boolean attack(Cell aCell) {
-		// TODO Auto-generated method stub
+	public int attack(Cell aCell) {
 		if(getActionPoints() >= 2) {
 			if(Math.abs(getLocationX() - aCell.getLocationX()) + 
 			   Math.abs(getLocationY() - aCell.getLocationY()) <= getAttackRange()) {
+				setActionPoints(0);
 				if(aCell.getHealth() > getAttackPoints()) {
 					aCell.setHealth(aCell.getHealth() - getAttackPoints());
-					System.out.println("You deal " + ATTACK_POINTS + " damages to the objective!");
+					return 2;
 				} else {
 					aCell.setHealth(0);
 					System.out.println("You killed the objective!");
+					return 3;
 				}
-				setActionPoints(0);
-				return true;
 			} else {
 				System.out.println("The objective is out of attack range.");
-				return false;
+				return 1;
 			}
-		} else
+		} else {
 			System.out.println("This unit does not have enough action points to do so.");
-			return false;
+			return 0;
+		}
 	}
 	 
 	

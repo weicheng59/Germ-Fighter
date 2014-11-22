@@ -9,7 +9,8 @@ public class GermTank extends Cell{
 					  MOVE_RANGE = 4, ACTION_POINTS = 4;
 	
 	// newborn WBC initial stats
-	public GermTank(){
+	public GermTank(Team team){
+		super(team);
 		setCellName("Tank");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
@@ -18,8 +19,6 @@ public class GermTank extends Cell{
 		setMoveRange(MOVE_RANGE);
 		setActionPoints(ACTION_POINTS);
 		setDoublingEffectValid(true);
-		setIcon("[G]");
-		items = new ArrayList<Item>();
 	}
 
 	@Override

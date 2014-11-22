@@ -7,14 +7,16 @@ import model.Cell;
 import model.GermBasic;
 import model.HealthPack;
 import model.Item;
+import model.Cell.Team;
 
 import org.junit.Test;
 
 public class TestingGermUsingItem {
+	private Team team = Team.GERM;
 	
 	@Test
 	public void testingGermBasicUsingAttackBooster(){
-		Cell user = new GermBasic();
+		Cell user = new GermBasic(team);
 		AttackBooster attackBooster = new AttackBooster();
 		
 		// cell has not used an Attack Booster item yet; standard attack points
@@ -33,7 +35,7 @@ public class TestingGermUsingItem {
 	
 	@Test
 	public void testingGermBasicUsingHealthPack(){
-		Cell user = new GermBasic();
+		Cell user = new GermBasic(team);
 		HealthPack healthPack = new HealthPack();
 		
 		// cell has not taken damage
@@ -80,7 +82,7 @@ public class TestingGermUsingItem {
 	
 	@Test
 	public void testingGermBasicUsingBomb(){
-		Cell user = new GermBasic();
+		Cell user = new GermBasic(team);
 		Bomb bomb = new Bomb();
 		
 		// cell's attack points confirmed

@@ -1,89 +1,80 @@
 package model;
 
+import model.Cell.Team;
+
 public class Room {
-	private boolean hasGerm, hasWbc, hasItem, hasMapObject, empty;
+	private boolean hasMapObject;
+	
+	// use item and cell object to store them in room instead of boolean
 	private Item item;
+	private Cell cell;
 	
 	public Room() {
-		hasGerm = false;
-		hasWbc = false;
-		hasItem = false;
+		item = null;
+		cell = null;
 		hasMapObject = false;
-		empty = false;
 	}
 	
-	
-	public boolean isGerm() {
-		return hasGerm;
+	public boolean hasCell() {
+		return cell != null;
 	}
 
-
-	public void setGerm(boolean germ) {
-		this.hasGerm = germ;
+	public boolean hasItem() {
+		return item != null;
 	}
 
-
-	public boolean isWbc() {
-		return hasWbc;
-	}
-
-
-	public void setWbc(boolean wbc) {
-		this.hasWbc = wbc;
-	}
-
-
-	public boolean isItem() {
-		return hasItem;
-	}
-
-
-	public void setItem(boolean item) {
-		this.hasItem = item;
-	}
-
-
-	public boolean isMapObject() {
+	public boolean hasMapObject() {
 		return hasMapObject;
 	}
-
 
 	public void setMapobject(boolean mapobject) {
 		this.hasMapObject = mapobject;
 	}
 
-
 	public boolean isEmpty() {
-		return empty;
-	}
-
-
-	public void setEmpty(boolean empty) {
-		this.empty = empty;
+		return !hasCell()  && !hasItem() && !hasMapObject;
 	}
 	
+	// set the actual item to this room
 	public void setItem(Item item){
 		this.item = item;
+	}
+	
+	/**
+	 * This method is used to pick up item
+	 * @return the Item in this room
+	 */
+	public Item removeItem() {
+		Item toReturn = item;
+		item = null;
+		return toReturn;
 	}
 	
 	// return the item in this room
 	public Item getItem() {
 		return item;
 	}
+	
+	public void setCell(Cell aCell) {
+		cell = aCell;
+	}
 
+	public Cell getCell() {
+		return cell;
+	}
 
 	public String toString(){
-		if(hasGerm == true)
-			return "[G]";
-		if(hasWbc == true)
-			return "[W]";
-		if(hasItem == true && (hasGerm == false || hasWbc == false))
+		if(hasCell())
+			if(cell.getTeam() == Team.GERM)
+				return "[G]";
+			else
+				return "[V]";
+		else if(hasItem())
 			return "[I]";
-		if(hasMapObject == true && (hasGerm == false || hasWbc == false))
+		else if(hasMapObject)
 			return "[O]";
-		else{
+		else
 			return "[ ]";
-		}
 	}
 	
 	/**
@@ -91,7 +82,7 @@ public class Room {
 	 * @return
 	 */
 	public boolean isFull(){
-		if(hasMapObject || hasGerm || hasWbc)
+		if(hasMapObject || hasCell())
 			return true;
 		else
 			return false;

@@ -23,25 +23,38 @@ public abstract class Cell implements Serializable{
 	private boolean doublingTruth;// allows picking up Attack Booster item or pass by it
 	private Item item;// item of a cell's inventory
 	private String icon;// shows what the cell will look like on the textview
-	private String[][] gameMap;
-	private boolean turn;
+	private Team team;
 	
-	public Cell(){
-		
+	public enum Team {
+		GERM, VIRUS
+	};
+	
+	public Cell(Team team){
+		setTeam(team);
+		if (team == Team.GERM)
+			setIcon("[G]");
+		else
+			setIcon("[V]");
 	}
 	
-	public Cell(String cell, int attackPoints, int health, int attackRange, int moveRange, int actionPoints, Item item){
+	public Cell(String cell, int attackPoints, int maxHealth, int attackRange, 
+				int moveRange, int maxActionPoints, Item item, Team team){
 		this.cellName = cell;
 		this.attackPoints = attackPoints;
-		this.health = health;
 		this.attackRange = attackRange;
 		this.moveRange = moveRange;
-		this.actionPoints = actionPoints;
 		this.item = item;
-		maxHealth = health;
-		maxActionPoints = actionPoints;
+		this.maxHealth = maxHealth;
+		this.maxActionPoints = maxActionPoints;
+		this.team = team;
+		actionPoints = 0;
+		health = maxHealth;
 		doublingTruth = true;
-		turn = false;
+		
+		if (team == Team.GERM)
+			setIcon("[G]");
+		else
+			setIcon("[V]");
 	}
 	
 	public String getCellName() {
@@ -80,7 +93,7 @@ public abstract class Cell implements Serializable{
 		return maxActionPoints;
 	}
 	
-	public void setMaxActionPoints(int maxActionPoints){
+	public void setMaxActionPoints(int maxActionPoints) {
 		this.maxActionPoints = maxActionPoints;
 	}
 
@@ -150,21 +163,11 @@ public abstract class Cell implements Serializable{
 		this.doublingTruth = doublingTruth;
 	}
 	
-	// useful method
-	public int getDistance(int locationX, int locationY) {
-		return Math.abs(getLocationX() - locationX) + Math.abs(getLocationY() - locationY);
+	// This method set current actionPoints to the max
+	// It is used to reset cell's actionPoint at the start of a turn
+	public void setActionPointsToMax(){
+		actionPoints = maxActionPoints;
 	}
-	
-	// 
-	public void endTurn(){
-		setActionPoints(0);
-	}
-	
-	public void beginTurn(){
-		setActionPoints(maxActionPoints);
-	}
-	
-	
 
 	/**
 	 * Subclasses must implement the following methods.
@@ -172,7 +175,7 @@ public abstract class Cell implements Serializable{
 	 * return if the attack is sucessfully
 	 * 
 	 */
-	public abstract boolean attack(Cell aCell);
+	public abstract int attack(Cell aCell);
 	
 	
 /*	public void setCanUseAttackBooster(boolean doublingTruth){
@@ -197,10 +200,12 @@ public abstract class Cell implements Serializable{
 	// "using" methods
 	public abstract void useItem(Item item);
 
-	
-	/**
-	 * return true if unit
-	 * return remaining actionPoints
-	 * 
-	 */
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
 }

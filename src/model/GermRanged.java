@@ -9,7 +9,8 @@ public class GermRanged extends Cell{
 					  MOVE_RANGE = 6, ACTION_POINTS = 6;
 	
 	// newborn Germ initial stats
-	public GermRanged(){
+	public GermRanged(Team team){
+		super(team);
 		setCellName("Ranged");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
@@ -18,7 +19,6 @@ public class GermRanged extends Cell{
 		setMoveRange(MOVE_RANGE);
 		setActionPoints(ACTION_POINTS);
 		setDoublingEffectValid(true);
-		setIcon("[G]");
 		items = new ArrayList<Item>();
 	}
 

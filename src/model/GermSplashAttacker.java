@@ -9,7 +9,8 @@ public class GermSplashAttacker extends Cell{
 					  MOVE_RANGE = 5, ACTION_POINTS = 5;
 	
 	// newborn Germ initial stats
-	public GermSplashAttacker(){
+	public GermSplashAttacker(Team team){
+		super(team);
 		setCellName("Splash Attacker");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
@@ -17,7 +18,6 @@ public class GermSplashAttacker extends Cell{
 		setAttackRange(ATTACK_RANGE);
 		setMoveRange(MOVE_RANGE);
 		setActionPoints(ACTION_POINTS);
-		setIcon("[G]");
 		items = new ArrayList<Item>();
 	}
 
