@@ -3,18 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GermBasic extends Cell{
+public class WBCBasic extends Cell{
 	private Item item2;
 	private final int ATTACK_POINTS = 4, HEALTH_POINTS = 10, MAX_HEALTH_POINTS = 10,
 					  ATTACK_RANGE = 1, MOVE_RANGE = 6, ACTION_POINTS = 6;
 	
-	// newborn Germ initial stats
-	public GermBasic(Team team){
+	// newborn WBC initial stats
+	public WBCBasic(Team team){
 		super(team);
-		if (team == Team.GERM)
-			setCellName("Basic Germ");
-		else
-			setCellName("Basic White Blood Cell");
+		setCellName("Basic WBC");
 		setAttackPoints(ATTACK_POINTS);
 		setHealth(HEALTH_POINTS);
 		setMaxHealth(MAX_HEALTH_POINTS);
@@ -36,7 +33,7 @@ public class GermBasic extends Cell{
 					return 2;
 				} else {
 					aCell.setHealth(0);
-					System.out.println("You killed the enemy White Blood Cell!");
+					System.out.println("You killed the enemy Germ!");
 					return 3;
 				}
 			} else {
@@ -49,7 +46,7 @@ public class GermBasic extends Cell{
 		}
 	}
 	 
-	
+	@Override
 	public String useItem() {
 		if (getItem() == null)
 			return "This unit does not have an item.";
@@ -70,6 +67,7 @@ public class GermBasic extends Cell{
 	//		set the bomb damage and also use that as an all around attack
 			return "Still working on that...";
 		}
+	
 	}
 
 	public Item getItem2() {
@@ -79,4 +77,6 @@ public class GermBasic extends Cell{
 	public void setItem2(Item item) {
 		this.item2 = item;
 	}
+	
+	
 }

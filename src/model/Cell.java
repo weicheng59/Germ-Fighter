@@ -26,13 +26,16 @@ public abstract class Cell implements Serializable{
 	private Team team;
 	
 	public enum Team {
-		GERM, VIRUS
+		GERM, WBC, VIRUS
 	};
 	
 	public Cell(Team team){
 		setTeam(team);
 		if (team == Team.GERM)
 			setIcon("[G]");
+		else if(team == Team.WBC){
+			setIcon("[W]");
+		}
 		else
 			setIcon("[V]");
 	}
@@ -54,7 +57,7 @@ public abstract class Cell implements Serializable{
 		if (team == Team.GERM)
 			setIcon("[G]");
 		else
-			setIcon("[V]");
+			setIcon("[W]");
 	}
 	
 	public String getCellName() {
@@ -178,9 +181,9 @@ public abstract class Cell implements Serializable{
 	public abstract int attack(Cell aCell);
 	
 	
-/*	public void setCanUseAttackBooster(boolean doublingTruth){
+	public void setCanUseAttackBooster(boolean doublingTruth){
 		this.doublingTruth = doublingTruth;
-	}*/
+	}
 	
 	/*
 	 public int getCellLevel(){
@@ -198,7 +201,7 @@ public abstract class Cell implements Serializable{
 	
 	
 	// "using" methods
-	public abstract void useItem(Item item);
+	public abstract String useItem();
 
 	public Team getTeam() {
 		return team;
@@ -206,6 +209,20 @@ public abstract class Cell implements Serializable{
 
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+	
+	public String getStatus() {
+		String status = "Unit Name: " + getCellName() 
+					+ "\nHealth: " + getHealth() + "/" + getMaxHealth()
+					+ "\nAttack Points: " + getAttackPoints()
+					+ "\nAttack Range: " + getAttackRange()
+					+ "\nAction Points: " + getActionPoints()
+					+ "\nItem: ";
+		if (getItem() == null)
+			status += "None";
+		else
+			status += getItem().getItemName();
+		return status;
 	}
 
 }

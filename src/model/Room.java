@@ -8,8 +8,13 @@ public class Room {
 	// use item and cell object to store them in room instead of boolean
 	private Item item;
 	private Cell cell;
+
+	public boolean hasItem;
+
+	public boolean hasUnit;
 	
 	public Room() {
+		hasItem = false;
 		item = null;
 		cell = null;
 		hasMapObject = false;
@@ -68,7 +73,7 @@ public class Room {
 			if(cell.getTeam() == Team.GERM)
 				return "[G]";
 			else
-				return "[V]";
+				return "[W]";
 		else if(hasItem())
 			return "[I]";
 		else if(hasMapObject)

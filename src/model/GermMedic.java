@@ -22,6 +22,29 @@ public class GermMedic extends Cell{
 		items = new ArrayList<Item>();
 	}
 
+	public int attack(Cell aCell) {
+		if(getActionPoints() >= 2) {
+			if(Math.abs(getLocationX() - aCell.getLocationX()) + 
+			   Math.abs(getLocationY() - aCell.getLocationY()) <= getAttackRange()) {
+				setActionPoints(0);
+				if(aCell.getHealth() > getAttackPoints()) {
+					aCell.setHealth(aCell.getHealth() - getAttackPoints());
+					return 2;
+				} else {
+					aCell.setHealth(0);
+					System.out.println("You killed the objective!");
+					return 3;
+				}
+			} else {
+				System.out.println("The objective is out of attack range.");
+				return 1;
+			}
+		} else {
+			System.out.println("This unit does not have enough action points to do so.");
+			return 0;
+		}
+	}
+	/*
 	@Override
 	public boolean attack(Cell aCell) {
 		// TODO Auto-generated method stub
@@ -45,13 +68,12 @@ public class GermMedic extends Cell{
 			System.out.println("This unit does not have enough action points to do so.");
 			return false;
 	}
-
+*/
 
 
 	@Override
-	public void useItem(Item item) {
-		// TODO Auto-generated method stub
-		
+	public String useItem() {
+		return null;		
 	}
 	
 	public boolean addItem(Item item) {

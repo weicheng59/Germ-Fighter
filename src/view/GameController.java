@@ -1,14 +1,12 @@
 package view;
 
 import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 
 public class GameController extends JPanel
 {
-	private JPanel canvas;
 	private JPanel movementPanel;
 	private JPanel actionPanel;
 	
@@ -23,8 +21,7 @@ public class GameController extends JPanel
 	
 	public GameController()
 	{
-		canvas = new JPanel();
-		canvas.setLayout(new GridLayout(2,1));
+		setLayout(new GridLayout(2,1));
 		
 		movementPanel = new JPanel();
 		movementPanel.setLayout(new GridLayout(2,3));
@@ -47,5 +44,8 @@ public class GameController extends JPanel
 		actionPanel.add(useItem);
 		actionPanel.add(endTurn);
 		actionPanel.add(special);
+		
+		add(actionPanel);
+		add(movementPanel);
 	}
 }

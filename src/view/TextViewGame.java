@@ -1,5 +1,6 @@
 package view;
 
+import java.util.Observable;
 import java.util.Scanner;
 
 import model.*;
@@ -11,35 +12,35 @@ import model.Cell.Team;
  *
  */
 
-public class TextViewGame {
-	final static int MAP_SIZE = 5;
-	final static int CREW_SIZE = 1;
-	final static int ROLL_BOUND = 100;
-	private static GermFighter game;
-	private static Player p1, p2;
-	private static Scanner scan = new Scanner(System.in);
-	private static boolean isP1turn; // store whoes turn
+public class TextViewGame extends Observable{
+	final int MAP_SIZE = 5;
+	final int CREW_SIZE = 1;
+	final int ROLL_BOUND = 100;
+	private GermFighter game;
+	private Player p1, p2;
+	private Scanner scan = new Scanner(System.in);
+	private boolean isP1turn; // store whoes turn
 	
-	public static void main(String[] args) {
+	public TextViewGame() {
 		// Setup Map and Welcome info
 		game = new GermFighter(MAP_SIZE);
 		game.printPrompt();
 		
 		// Player 1 choose team
-		game.setPrompt("Player 1 please choose team: Germ or Virus");
+		game.setPrompt("Player 1 please choose team: Germ or WBC");
 		game.printPrompt();
 		String input = scan.next().toLowerCase();
-		while (!input.contains("germ") && !input.contains("virus")) {
+		while (!input.contains("germ") && !input.contains("wbc")) {
 			game.printInvalidInput();
 			input = scan.next().toLowerCase();
 		}
 		
 		if(input.equals("germ")) {
 			p1 = new Player(Team.GERM, 1);
-			p2 = new Player(Team.VIRUS, 2);
+			p2 = new Player(Team.WBC, 2);
 		}
-		else if(input.equals("virus")) {
-			p1 = new Player(Team.VIRUS, 1);
+		else if(input.equals("wbc")) {
+			p1 = new Player(Team.WBC, 1);
 			p2 = new Player(Team.GERM, 2);
 		}
 		
@@ -53,8 +54,10 @@ public class TextViewGame {
 		// For iteration 1 we use a preset spawning location
 		game.SpawnCell(p1.getCrew().get(0));
 		game.SpawnCell(p2.getCrew().get(0));
-		game.SpawnItem(new HealthPack());
-		
+		game.SpawnItem(new AttackBooster());
+	}
+	
+	public void gameStart() {
 		// Decide who goes first
 		// the player go first will have its goFirst boolean set to true
 		roll(p1, p2);
@@ -115,7 +118,6 @@ public class TextViewGame {
 					case 1:
 						controlCell(p2, 0);
 						break;
-						
 					// Dont worry about other cells for iteration1
 						
 					}
@@ -131,8 +133,10 @@ public class TextViewGame {
 		game.printPrompt();
 	}
 	
-	private static void controlCell(Player player, int i) {
-		game.setPrompt("Please choose an action to perform. (input number)"
+	private void controlCell(Player player, int i) {
+
+		game.setPrompt(player.getCrew().get(i).getStatus() 
+				+ "\nPlease choose an action to perform. (input number)"
 				+ "\nOr input 0 to return to the crew member choosing menu."
 				+ "\n1. Move\n2. Attack\n3. Use item (not avaible in this beta)");
 		game.printPrompt();
@@ -146,6 +150,9 @@ public class TextViewGame {
 				attack(player, i);
 				actionIndex = 0;
 				break;
+			case 3:
+				useItem(player, i);
+				break;
 			}
 			game.setPrompt("Please choose an action to perform. (input number)"
 					+ "\nOr input 0 to return to the crew member choosing menu."
@@ -153,9 +160,16 @@ public class TextViewGame {
 			game.printPrompt();
 			actionIndex = scan.nextInt();
 		}
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
-	private static void attack(Player player, int i) {
+	private void useItem(Player player, int i) {
+		game.setPrompt(player.getCrew().get(i).useItem());
+		game.printPrompt();
+	}
+
+	private void attack(Player player, int i) {
 		game.setPrompt("Choose a direction to attack. (input wasd)" 
 					+"\nOr input f to finish attack and return to the previous menu.");
 		game.printPrompt();
@@ -170,6 +184,13 @@ public class TextViewGame {
 						p2.removeCell(game.getRoom(y-1, x).getCell());
 					else
 						p1.removeCell(game.getRoom(y-1, x).getCell());
+				} else if (prompt == 2) {
+					game.setPrompt("You dealt " + aCell.getAttackPoints() 
+							+ " damage to the objective!" + "\nThe " 
+							+ game.getRoom(y-1, x).getCell().getCellName() + " has " 
+							+ game.getRoom(y-1, x).getCell().getHealth() + 
+							" health points remaining.");
+					game.printPrompt();
 				}
 			}
 			else if (attackDirection.equals("a")) {
@@ -179,6 +200,13 @@ public class TextViewGame {
 						p2.removeCell(game.getRoom(y, x-1).getCell());
 					else
 						p1.removeCell(game.getRoom(y, x-1).getCell());
+				} else if (prompt == 2) {
+					game.setPrompt("You dealt " + aCell.getAttackPoints() 
+							+ " damage to the objective!" + "\nThe " 
+							+ game.getRoom(y, x-1).getCell().getCellName() + " has " 
+							+ game.getRoom(y, x-1).getCell().getHealth() + 
+							" health points remaining.");
+					game.printPrompt();
 				}
 			}
 			else if (attackDirection.equals("s")) {
@@ -188,24 +216,40 @@ public class TextViewGame {
 						p2.removeCell(game.getRoom(y+1, x).getCell());
 					else
 						p1.removeCell(game.getRoom(y+1, x).getCell());
+				} else if (prompt == 2) {
+					game.setPrompt("You dealt " + aCell.getAttackPoints() 
+							+ " damage to the objective!" + "\nThe " 
+							+ game.getRoom(y+1, x).getCell().getCellName() + " has " 
+							+ game.getRoom(y+1, x).getCell().getHealth() + 
+							" health points remaining.");
+					game.printPrompt();
 				}
 			}
 			else if (attackDirection.equals("d")) {
 				prompt = aCell.attack(game.getRoom(y, x+1).getCell());
 				if (prompt == 3) {
 					if (player.getPlayerNum() == 1)
-						p2.removeCell(game.getRoom(y+1, x).getCell());
+						p2.removeCell(game.getRoom(y, x+1).getCell());
 					else
-						p1.removeCell(game.getRoom(y+1, x).getCell());
+						p1.removeCell(game.getRoom(y, x+1).getCell());
+				}  else if (prompt == 2) {
+					game.setPrompt("You dealt " + aCell.getAttackPoints() 
+							+ " damage to the objective!" + "\nThe " 
+							+ game.getRoom(y, x+1).getCell().getCellName() + " has " 
+							+ game.getRoom(y, x+1).getCell().getHealth() + 
+							" health points remaining.");
+					game.printPrompt();
 				}
 			}
 			else if (attackDirection.equals("f")) {
 				game.setPrompt("Finish attacking.");
 				game.printPrompt();
 			}
+			this.setChanged();
+			notifyObservers();
 	}
 	
-	private static void move(Player player, int i) {
+	private void move(Player player, int i) {
 		Cell aCell = player.getCrew().get(i);
 		game.setPrompt("Now you have acess to move " + aCell.getCellName() 
 				+ " til the cell run out of action points. (input wasd)" 
@@ -222,13 +266,17 @@ public class TextViewGame {
 			else if (moveDirection.equals("d"))
 				game.move(aCell, MoveDirection.Right);
 			game.printMap(MAP_SIZE);
+			
+			this.setChanged();
+			notifyObservers();
+
 			moveDirection = scan.nextLine();
 		}
 		game.setPrompt("Finish moving.");
 		game.printPrompt();
 	}
 	
-	private static void roll(Player p1, Player p2) {
+	private void roll(Player p1, Player p2) {
 		game.setPrompt("Both player will roll a number out of " + ROLL_BOUND 
 				+ " to decide which player goes first.");
 		game.printPrompt();
@@ -264,7 +312,7 @@ public class TextViewGame {
 		game.printPrompt();
 	}
 	
-	private static void chooseCrew(Player aPlayer) {
+	private void chooseCrew(Player aPlayer) {
 		for (int i = 0; i < CREW_SIZE; i++) {
 			game.setPrompt("Player " + aPlayer.getPlayerNum() + " please choose your crew: "
 					+ "\nYou could choose upto " + CREW_SIZE 
@@ -283,7 +331,7 @@ public class TextViewGame {
 					if(aPlayer.getTeam() == Team.GERM)
 						aPlayer.addCell(new GermBasic(Team.GERM));
 					else
-						aPlayer.addCell(new GermBasic(Team.VIRUS));
+						aPlayer.addCell(new GermBasic(Team.WBC));
 					break;
 					
 				// Dont worry about these in Iter 1	
@@ -303,5 +351,9 @@ public class TextViewGame {
 					break;
 			}
 		} // End of for loop
+	}
+	
+	public Room getRoom(int x, int y) {
+		return game.getRoom(x, y);
 	}
 }
