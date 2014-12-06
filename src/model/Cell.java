@@ -24,6 +24,7 @@ public abstract class Cell implements Serializable{
 	private Item item;// item of a cell's inventory
 	private String icon;// shows what the cell will look like on the textview
 	private Team team;
+	private int cellLevel;
 	
 	public enum Team {
 		GERM, WBC, VIRUS
@@ -50,6 +51,7 @@ public abstract class Cell implements Serializable{
 		this.maxHealth = maxHealth;
 		this.maxActionPoints = maxActionPoints;
 		this.team = team;
+		this.cellLevel = 1;
 		actionPoints = 0;
 		health = maxHealth;
 		doublingTruth = true;
@@ -185,19 +187,21 @@ public abstract class Cell implements Serializable{
 		this.doublingTruth = doublingTruth;
 	}
 	
-	/*
-	 public int getCellLevel(){
-	 	return level;
-	 }
-	 
-	 public void setCellLevel(int level){
-	 	this.level = level;
-	 }
-	 
-	 public void cellLeveledUp(Cell cell){
-	 	cell.setCellLevel(cell.getCellLevel() + 1);
-	 }
+	/**
+	 * Returns 
+	 * @return
 	 */
+	public int getCellLevel(){
+		return cellLevel;
+	}
+	 
+	public void setCellLevel(int cellLevel){
+		this.cellLevel = cellLevel;
+	}
+	 
+	public void cellLeveledUp(Cell cell){
+		cell.setCellLevel(cell.getCellLevel() + 1);
+	}
 	
 	
 	// "using" methods

@@ -48,9 +48,14 @@ public class Virus extends Cell{
 		}
 	}
 
-	@Override
+	
 	public void useItem(Item item) {
-		// Viruses do not use items!
-		
+		// Viruses do not use items!		
+	}
+
+	@Override
+	public String useItem() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
