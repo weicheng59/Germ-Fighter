@@ -329,9 +329,9 @@ public class TextViewGame extends Observable{
 			switch (cellType) {
 				case 1: 
 					if(aPlayer.getTeam() == Team.GERM)
-						aPlayer.addCell(new GermBasic(Team.GERM));
+						aPlayer.addCell(new UnitBasic(Team.GERM));
 					else
-						aPlayer.addCell(new GermBasic(Team.WBC));
+						aPlayer.addCell(new UnitBasic(Team.WBC));
 					break;
 					
 				// Dont worry about these in Iter 1	
