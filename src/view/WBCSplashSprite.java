@@ -8,11 +8,11 @@ import java.lang.Thread.State;
 import javax.imageio.ImageIO;
 
 public class WBCSplashSprite extends Sprite{
-	private static final int LeftBorder = 1; // TODO
-	private static final int VertBorder = 1; // TODO
-	private static final int MAX_FRAMES = 1; // TODO
-	private static final int width = 1; // TODO
-	private static final int height = 1; // TODO
+	private static final int LeftBorder = 3; // TODO
+	private static final int VertBorder = 4; // TODO
+	private static final int MAX_FRAMES = 7; // TODO
+	private static final int width = 35; // TODO
+	private static final int height = 35; // TODO
 	
 	private static BufferedImage sheet;
 	private State previousState;
@@ -20,7 +20,7 @@ public class WBCSplashSprite extends Sprite{
 	public WBCSplashSprite(){
 		if(sheet == null)
 			try{
-				sheet = ImageIO.read(new File("WBC SPLASH HERE"));
+				sheet = ImageIO.read(new File("images/Bomb Cell Sprite"));
 			}
 			catch(Exception e){};
 		previousState = State.IDLE;
@@ -43,14 +43,9 @@ public class WBCSplashSprite extends Sprite{
 		
 		switch(getState()){
 			case IDLE:
-				col = 0;
-				switch(previousState){
-				case MOVING: row = 2;// TODO
-					break;
-				default:
-					break;
-				}
-			case MOVING: row = 3; //TODO
+				row = 1;
+			case MOVING: 
+				row = 0; //TODO
 				break;
 			default:
 				break;
@@ -61,18 +56,18 @@ public class WBCSplashSprite extends Sprite{
 		
 		BufferedImage temp = sheet.getSubimage(LeftBorder + col * width, row * (height + VertBorder), width - offset, height);
 		
-		return temp.getScaledInstance(2*width, 2*height, Image.SCALE_DEFAULT);
+		return temp;
 	}
 
 	@Override
 	public int getWidth() {
 		// TODO
-		return 2 * width;
+		return width;
 	}
 
 	@Override
 	public int getHeight() {
 		// TODO
-		return 2 * height;
+		return height;
 	}
 }
